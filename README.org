@@ -1,0 +1,63 @@
+* About
+This is an assembler for the CHIP-8 instruction set written entirely in Emacs Lisp. Together with [[https://depp.brause.cc/chip8.el/][chip8.el]], this means you can assemble and run CHIP-8 programs without the need of external tools.
+
+Both CHIP-8 and Super Chip-48 instructions are implemented.
+
+* Installation
+You can install this package with [[https://github.com/quelpa/quelpa][Quelpa]], [[https://github.com/radian-software/straight.el][straight.el]] or by manually requiring the ~chip8-asm.el~ file.
+
+* Usage
+Use the ~chip8-asm~ interactive function in order to assemble the current file. You will be asked for the path to the output binary.
+
+* Synthax and Special Instructions
+** Available Instructions
+For a list of available instructions and their synthax, look at [[http://devernay.free.fr/hacks/chip8/C8TECH10.HTM][Cowgod's Chip-8 Technical Reference]].
+** Labels
+Labels are written with a colon separating them from the following instructions. Labels can be used in place of addresses.
+~label:~
+~JP label~
+** Comments
+Any text following a semicolon is considered a comment
+~; This is a comment~
+** ~org~ command: Location in Memory
+In order to define where the following instructions and/or data are placed in memory, you can use the ~org~ command.
+~org $200~
+** Numbers
+There is no distinction between immediate values and addresses, since the instruction set uses them in completely separate instructions.
+*** Numeric bases
+~%~ is used for binary integers.
+~%1111~
+No prefix is used for decimal integers.
+~15~
+~$~ is used for hexadecimal numbers.
+~$F~
+** ~db~ command: Add bytes as data
+You can add bytes to the binary using the ~db~ command followed by a list of numbers each representing a byte.
+#+BEGIN_SRC asm
+small_o:  db %00000000
+	  db %11110000
+	  db %10010000
+	  db %11110000
+
+     #+END_SRC
+* Example
+#+BEGIN_SRC asm
+        org $200
+	
+	HIGH
+	LD I, sprite
+        LD V0, $32
+        LD V1, $16
+
+        DRW V0, V1, 0
+
+end:	JP end
+
+
+sprite:	
+        db $55 $55 $55 $55
+	db $55 $55 $55 $55
+	db $55 $55 $55 $55
+	db $55 $55 $55 $55
+
+     #+END_SRC
