@@ -258,5 +258,9 @@
 	      (-drop initial-offset (append bytes nil))
 	    (lambda (b) (insert b)))))
       )))
-    
-  )
+
+(defun chip8-run-buffer ()
+  (interactive)
+  (chip8-asm "/tmp/emacs-chip8.bin")
+  (chip8-emulate "/tmp/emacs-chip8.bin"))
+
