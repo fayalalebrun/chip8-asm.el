@@ -142,6 +142,8 @@
        (chip8-asm-parse-addr #xA (match-string 1 expr) identity))
       ((rx (chip8-wss (seq "JP" chip8-spc (chip8-v #x0) chip8-spc chip8-nwtg)))
        (chip8-asm-parse-addr #xB (match-string 1 expr) identity))
+      ((rx (chip8-wss (seq "RND" chip8-spc chip8-vx chip8-spc  chip8-nwtg)))
+       (chip8-asm-parse-byte #xC (match-string 1 expr) (match-string 2 expr) identity))
       ((rx (chip8-wss (seq "DRW" chip8-spc chip8-vx chip8-spc chip8-vx chip8-spc  chip8-nwtg)))
        (chip8-asm-parse-two-reg-and-nibble #xD (match-string 1 expr) (match-string 2 expr) (match-string 3 expr) identity))
       ((rx (chip8-wss (seq "SKP" chip8-spc chip8-vx)))
