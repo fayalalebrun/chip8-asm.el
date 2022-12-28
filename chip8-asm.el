@@ -206,7 +206,7 @@
 		  (list nil 0 nil))
 		 ((rx (chip8-wss (seq "ORG" chip8-spc chip8-nwtg))) ; Tells us location to place following bytes
 		  (list nil (- (chip8-asm-parse-number (match-string 1 line)) curr-addr) nil))
-		 ((rx bol (group (+ (or alphanumeric "-" "_"))) ":" chip8-spc eol) ; With label
+		 ((rx bol (group (+ (or alphanumeric "-" "_"))) ":" (opt chip8-spc) eol) ; With label
 		  (list (match-string 1 line) 0 nil))
 		 ((rx bol (group (+ (or alphanumeric "-" "_"))) ":" (group (* anychar)) eol) ; With label
 		  (cons (match-string 1 line) (chip8-asm-parse-instr-or-data (match-string 2 line))))
