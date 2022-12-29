@@ -47,7 +47,9 @@
      (funcall identity (chip8-asm-op prefix #x0 #x0 val)))
 
     ((and val (rx (group (one-or-more (or alphanumeric "-" "_")))))
-     (lambda (label-assoc) (chip8-asm-op prefix #x0 #x0 (alist-get val label-assoc nil nil 'string-equal)))))
+     (lambda (label-assoc) (chip8-asm-op prefix #x0 #x0
+					 (-let [addr (alist-get val label-assoc nil nil 'string-equal)]
+					   (if addr addr (error "Label not found: %s" val)))))))
   )
 
 ;; Parses a byte given a register, byte and prefix, creating an instruction
@@ -107,7 +109,7 @@
       ((rx (chip8-wss (seq "SYS" chip8-spc chip8-nwtg)))
        (chip8-asm-parse-addr #x0 (match-string 1 expr) identity))
       ((rx (chip8-wss (seq "JP" chip8-spc (chip8-v "0") chip8-spc chip8-nwtg)))
-       (chip8-asm-parse-addr #xB (match-string 1 expr) identity))
+       (chip8-asm-parse-addr #xB (match-string 2 expr) identity))
       ((rx (chip8-wss (seq "JP" chip8-spc chip8-nwtg)))
        (chip8-asm-parse-addr #x1 (match-string 1 expr) identity))
       ((rx (chip8-wss (seq "CALL" chip8-spc chip8-nwtg)))
